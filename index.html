@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Remote Control — Authorized</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{min-height:100vh;background:#f4f7fb;color:#172033}
+header{background:#fff;border-bottom:1px solid #e5eaf2;padding:18px 22px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:21px;font-weight:800}.badge{background:#e8f8ee;color:#18864b;padding:7px 10px;border-radius:20px;font-size:12px;font-weight:700}
+main{max-width:1050px;margin:28px auto;padding:0 18px}
+.hero{background:linear-gradient(135deg,#2563eb,#4f46e5);color:white;border-radius:20px;padding:28px;box-shadow:0 12px 30px #2946a31f}
+.hero h1{font-size:28px;margin-bottom:8px}.hero p{opacity:.9}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:18px}
+.card{background:#fff;border:1px solid #e6ebf2;border-radius:18px;padding:20px;box-shadow:0 8px 24px #182b490b}
+.card h2{font-size:17px;margin-bottom:15px}
+.device{display:flex;align-items:center;justify-content:space-between;padding:15px;border:1px solid #e6ebf2;border-radius:14px;margin-bottom:12px}
+.device-left{display:flex;gap:12px;align-items:center}.phone{width:43px;height:52px;border-radius:9px;background:#eef3ff;display:grid;place-items:center;font-size:22px}
+.small{font-size:12px;color:#718096;margin-top:4px}.online{color:#159447;font-size:12px;font-weight:700}
+button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+.connect{background:#2563eb;color:white}.danger{background:#feecec;color:#c62828}.action{background:#eef3ff;color:#2454c6;width:100%;padding:14px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.status{margin-top:12px;padding:12px;border-radius:10px;background:#f5f7fa;color:#526174;font-size:13px}
+.log{font-size:13px;line-height:1.7;color:#536174;max-height:190px;overflow:auto}
+.notice{margin-top:18px;background:#fff9e8;border:1px solid #f3df9b;padding:14px;border-radius:14px;font-size:13px;color:#745d15}
+footer{text-align:center;color:#8a94a6;font-size:12px;padding:25px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.hero h1{font-size:23px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">⚡ Remote Control</div>
+  <div class="badge">AUTHORIZED MODE</div>
+</header>
+
+<main>
+<section class="hero">
+  <h1>Remote Control Dashboard</h1>
+  <p>Kontrol perangkat yang telah terhubung dan memberikan izin.</p>
+</section>
+
+<div class="grid">
+<section class="card">
+  <h2>Perangkat</h2>
+  <div class="device">
+    <div class="device-left">
+      <div class="phone">📱</div>
+      <div><b>HP Saya</b><div class="small">Android • Device-001</div><div class="online">● Online</div></div>
+    </div>
+    <button class="connect" onclick="connect()">Connect</button>
+  </div>
+  <div class="status" id="status">Belum terhubung. Hubungkan perangkat yang Anda miliki.</div>
+</section>
+
+<section class="card">
+  <h2>Perintah</h2>
+  <div class="actions">
+    <button class="action" onclick="sendCmd('🔔 Membunyikan nada')">🔔 Ring</button>
+    <button class="action" onclick="sendCmd('🔦 Mengubah status senter')">🔦 Flashlight</button>
+    <button class="action" onclick="sendCmd('🔒 Mengirim perintah lock')">🔒 Lock</button>
+    <button class="action" onclick="sendCmd('📸 Meminta screenshot')">📸 Screenshot</button>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Activity Log</h2>
+  <div class="log" id="log">Belum ada aktivitas.</div>
+</section>
+</div>
+
+<div class="notice">
+  <b>Catatan:</b> halaman ini adalah dashboard demo/front-end. HTML/JS di browser tidak dapat mengambil alih HP lain secara langsung. Untuk kontrol nyata, target harus menjalankan aplikasi/agent resmi yang terhubung melalui kanal aman dan memberikan persetujuan.
+</div>
+</main>
+<footer>Remote Control • Authorized devices only</footer>
+
+<script>
+let connected=false;
+function addLog(text){
+  const log=document.getElementById('log');
+  const time=new Date().toLocaleTimeString('id-ID');
+  if(log.textContent==='Belum ada aktivitas.') log.innerHTML='';
+  log.innerHTML=`<div>[${time}] ${text}</div>`+log.innerHTML;
+}
+function connect(){
+  connected=!connected;
+  document.getElementById('status').textContent=connected
+    ? 'Terhubung ke perangkat yang diotorisasi.'
+    : 'Koneksi diputus.';
+  document.querySelector('.connect').textContent=connected?'Disconnect':'Connect';
+  addLog(connected?'✅ Perangkat terhubung':'⛔ Koneksi diputus');
+}
+function sendCmd(cmd){
+  if(!connected){
+    document.getElementById('status').textContent='Hubungkan perangkat terlebih dahulu.';
+    addLog('⚠️ Perintah ditolak: perangkat belum terhubung');
+    return;
+  }
+  document.getElementById('status').textContent=cmd+' — demo command dikirim.';
+  addLog('➡️ '+cmd);
+}
+</script>
+</body>
+</html>
